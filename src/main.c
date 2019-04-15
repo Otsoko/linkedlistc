@@ -22,31 +22,36 @@ void print_list(linked_list_t ll) {
     }
 }
 
+void print(linked_list_t ll) {
+    psize(ll);
+    print_list(ll);
+    printf("\n");
+}
+
 int main(int argc, char const *argv[]) {
     linked_list_t ll;
     node_t *      node;
     jap_imudata_t data;
 
     ll_init(&ll);
-    psize(ll);
-    print_list(ll);
+    print(ll);
 
     for (int i = 0; i < 11; i++) {
         data.timestamp.seconds = i;
         ll_add(&ll, data);
-        psize(ll);
-        print_list(ll);
+        print(ll);
     }
+
+    ll_reverse(&ll);
+    print(ll);
 
     for (int i = 0; i < 6; i++) {
         ll_delete_head(&ll);
-        psize(ll);
-        print_list(ll);
+        print(ll);
     }
 
     ll_destroy(&ll);
-    psize(ll);
-    print_list(ll);
+    print(ll);
 
     node = ll_create_node(data);
     free(node);

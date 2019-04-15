@@ -57,3 +57,18 @@ void ll_delete_head(linked_list_t *list) {
         list->size--;
     }
 }
+
+void ll_reverse(linked_list_t *list) {
+    node_t *reversed = NULL;
+    node_t *current  = list->head;
+    node_t *temp     = NULL;
+
+    while (current != NULL) {
+        temp       = current;
+        current    = current->next;
+        temp->next = reversed;
+        reversed   = temp;
+    }
+
+    list->head = reversed;
+}
