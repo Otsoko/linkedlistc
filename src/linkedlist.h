@@ -38,6 +38,7 @@ void    ll_destroy(linked_list_t *list);
 node_t *ll_create_node(jap_imudata_t data);
 void    ll_add(linked_list_t *list, jap_imudata_t data);
 void    ll_delete_head(linked_list_t *list);
+void    ll_delete_tail(linked_list_t *list);
 void    ll_reverse(linked_list_t *list);
 
 #endif

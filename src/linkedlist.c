@@ -58,6 +58,33 @@ void ll_delete_head(linked_list_t *list) {
     }
 }
 
+void ll_delete_tail(linked_list_t *list) {
+    if (list->head == NULL) {
+        return;
+    }
+
+    node_t *current = NULL;
+
+    if (list->size == 1) {
+        current    = list->head;
+        list->head = NULL;
+        free(current);
+        list->size = 0;
+    } else {
+        current          = list->head;
+        node_t *previous = NULL;
+
+        while (current->next != NULL) {
+            previous = current;
+            current  = current->next;
+        }
+
+        previous->next = NULL;
+        free(current);
+        list->size--;
+    }
+}
+
 void ll_reverse(linked_list_t *list) {
     node_t *reversed = NULL;
     node_t *current  = list->head;

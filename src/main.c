@@ -50,6 +50,11 @@ int main(int argc, char const *argv[]) {
         print(ll);
     }
 
+    for (int i = 0; i < 8; i++) {
+        ll_delete_tail(&ll);
+        print(ll);
+    }
+
     ll_destroy(&ll);
     print(ll);
 
