@@ -1,9 +1,10 @@
 #include "linkedlist.h"
-#include <stdio.h>
+#include <string.h>
 
-void ll_init(linked_list_t *list) {
-    list->head = NULL;
-    list->size = 0;
+void ll_init(linked_list_t *list, size_t element_size) {
+    list->head         = NULL;
+    list->length       = 0;
+    list->element_size = element_size;
 }
 
 void ll_destroy(linked_list_t *list) {
@@ -11,48 +12,58 @@ void ll_destroy(linked_list_t *list) {
     node_t *next    = current;
     while (current != NULL) {
         next = current->next;
+        free(current->data);
         free(current);
         current = next;
     }
-    list->head = NULL;
-    list->size = 0;
+    list->head         = NULL;
+    list->length       = 0;
+    list->element_size = 0;
 }
 
-node_t *ll_create_node(jap_imudata_t data) {
+node_t *ll_create_node(linked_list_t *list, void *data) {
     node_t *new = malloc(sizeof(node_t));
 
     if (!new) {
         return NULL;
     }
 
-    new->data = data;
+    new->data = malloc(list->element_size);
+
+    if (!new->data) {
+        return NULL;
+    }
+
+    memcpy(new->data, data, list->element_size);
+
     new->next = NULL;
 
     return new;
 }
 
-void ll_add(linked_list_t *list, jap_imudata_t data) {
+void ll_add(linked_list_t *list, void *data) {
     node_t *current = NULL;
 
     if (list->head == NULL) {
-        list->head = ll_create_node(data);
+        list->head = ll_create_node(list, data);
     } else {
         current = list->head;
         while (current->next != NULL) {
             current = current->next;
         }
-        current->next = ll_create_node(data);
+        current->next = ll_create_node(list, data);
     }
 
-    list->size++;
+    list->length++;
 }
 
 void ll_delete_head(linked_list_t *list) {
     if (list->head != NULL) {
         node_t *head = list->head;
         list->head   = head->next;
+        free(head->data);
         free(head);
-        list->size--;
+        list->length--;
     }
 }
 
@@ -63,11 +74,12 @@ void ll_delete_tail(linked_list_t *list) {
 
     node_t *current = NULL;
 
-    if (list->size == 1) {
+    if (list->length == 1) {
         current    = list->head;
         list->head = NULL;
+        free(current->data);
         free(current);
-        list->size = 0;
+        list->length = 0;
     } else {
         current          = list->head;
         node_t *previous = NULL;
@@ -78,8 +90,9 @@ void ll_delete_tail(linked_list_t *list) {
         }
 
         previous->next = NULL;
+        free(current->data);
         free(current);
-        list->size--;
+        list->length--;
     }
 }
 

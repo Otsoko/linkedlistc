@@ -1,44 +1,66 @@
 #include "linkedlist.h"
+#include <stdint.h>
 #include <stdio.h>
 
-void psize(linked_list_t ll) {
-    printf("Size: %zd\n", ll.size);
+/**
+ * @brief Structure for storing a timestamp using 6 bytes.
+ * 
+ */
+typedef struct {
+    uint32_t seconds; /**< Seconds */
+    uint16_t millis;  /**< Milliseconds */
+} jap_time_t;
+
+/**
+ * @brief Structure for storing IMU data.
+ * 
+ */
+typedef struct {
+    short      accel[3];  /**< Accelerometer data */
+    short      gyro[3];   /**< Gyroscope data */
+    jap_time_t timestamp; /**< Millis from 2019-01-01 00:00:00 GMT */
+} jap_imudata_t;
+
+void plength(linked_list_t ll) {
+    printf("Length: %zd\n", ll.length);
 }
 
 void print_list(linked_list_t ll) {
-    node_t *current = ll.head;
+    node_t *       current = ll.head;
+    jap_imudata_t *data;
 
     if (ll.head == NULL) {
         printf("[]\n");
     } else {
         printf("[");
         current = ll.head;
-        printf("%d", current->data.timestamp.seconds);
+        data    = current->data;
+        printf("%d", data->timestamp.seconds);
         while (current->next != NULL) {
             current = current->next;
-            printf(", %d", current->data.timestamp.seconds);
+            data    = current->data;
+            printf(", %d", data->timestamp.seconds);
         }
         printf("]\n");
     }
 }
 
 void print(linked_list_t ll) {
-    psize(ll);
+    plength(ll);
     print_list(ll);
     printf("\n");
 }
 
 int main(int argc, char const *argv[]) {
     linked_list_t ll;
-    node_t *      node;
     jap_imudata_t data;
 
-    ll_init(&ll);
+    ll_init(&ll, sizeof(jap_imudata_t));
     print(ll);
 
     for (int i = 0; i < 11; i++) {
         data.timestamp.seconds = i;
-        ll_add(&ll, data);
+        ll_add(&ll, &data);
         print(ll);
     }
 
@@ -50,7 +72,7 @@ int main(int argc, char const *argv[]) {
         print(ll);
     }
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 3; i++) {
         ll_delete_tail(&ll);
         print(ll);
     }
@@ -58,10 +80,8 @@ int main(int argc, char const *argv[]) {
     ll_destroy(&ll);
     print(ll);
 
-    node = ll_create_node(data);
-    free(node);
-
-    printf("sizeof: %zd\n", sizeof(node_t));
+    printf("Size of node_t: %zd\n", sizeof(node_t));
+    printf("Size of structure: %zd\n", sizeof(jap_imudata_t));
 
     return 0;
 }
