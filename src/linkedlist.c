@@ -11,9 +11,7 @@ void ll_destroy(linked_list_t *list) {
     node_t *next    = current;
     while (current != NULL) {
         next = current->next;
-        //printf("free\n");
         free(current);
-        //printf("freed\n");
         current = next;
     }
     list->head = NULL;
