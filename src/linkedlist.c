@@ -31,6 +31,7 @@ node_t *ll_create_node(linked_list_t *list, void *data) {
     new->data = malloc(list->element_size);
 
     if (!new->data) {
+        free(new);
         return NULL;
     }
 
