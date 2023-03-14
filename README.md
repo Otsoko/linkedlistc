@@ -1,5 +1,5 @@
 # Linked list #
-Generic linked list implementation on C. Can be used to store any custom data structure.
+Generic linked list implementation in C. Can be used to store any custom data structure.
 
 ## How to use ##
 To include header
