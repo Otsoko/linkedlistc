@@ -1,5 +1,4 @@
-#ifndef __LINKEDLIST_H__
-#define __LINKEDLIST_H__
+#pragma once
 
 #include <stdlib.h>
 
@@ -21,5 +20,3 @@ void    ll_add(linked_list_t *list, void *data);
 void    ll_delete_head(linked_list_t *list);
 void    ll_delete_tail(linked_list_t *list);
 void    ll_reverse(linked_list_t *list);
-
-#endif // __LINKEDLIST_H__
